@@ -14,6 +14,7 @@
 @property double y;
 
 - (Vec2f*) addE:(Vec2f*)vec mult:(double)mult;
+- (double) len;
 - (double) dist:(double)x y:(double)y;
 
 @end
