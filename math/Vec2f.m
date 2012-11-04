@@ -21,7 +21,7 @@
 - (Vec2f*) maxE:(double)max {
     float l = [self len];
     if(l > max) {
-        double d = max/len;
+        double d = max/l;
         x*=d;
         y*=d;
     }
