@@ -12,6 +12,7 @@
 
 @synthesize x,y;
 
+
 - (Vec2f*) addE:(Vec2f*)vec mult:(double)mult {
     x+=vec.x*mult;
     y+=vec.y*mult;
@@ -25,6 +26,28 @@
         x*=d;
         y*=d;
     }
+    return self;
+}
+
+- (Vec2f*) minus:(Vec2f*)v {
+    Vec2f* ret = [Vec2f new];
+    ret.x = self.x - v.x;
+    ret.y = self.y - v.y;
+    return ret;
+}
+
+- (Vec2f*) normaliseE {
+    double l = [self len];
+    if(l > 0) {
+        x/=l;
+        y/=l;
+    }
+    return self;
+}
+
+- (Vec2f*) multE:(double)val {
+    x*=val;
+    y*=val;
     return self;
 }
 
