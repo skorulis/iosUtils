@@ -19,5 +19,6 @@
 - (Vec2f*) minus:(Vec2f*)v;
 - (Vec2f*) normaliseE;
 - (Vec2f*) multE:(double)val;
+- (Vec2f*) clampE:(double)max;
 
 @end

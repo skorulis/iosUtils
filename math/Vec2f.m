@@ -51,6 +51,16 @@
     return self;
 }
 
+- (Vec2f*) clampE:(double)max {
+    double l = self.len;
+    if(l > max) {
+        double m = l/max;
+        x/=m;
+        y/=m;
+    }
+    return self;
+}
+
 - (double) len {
     return sqrt(x*x + y*y);
 }
