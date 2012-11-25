@@ -65,6 +65,10 @@
     return sqrt(x*x + y*y);
 }
 
+- (double) dist:(Vec2f*)v {
+    return sqrt( (x-v.x)*(x-v.x) + (y-v.y)*(y-v.y) );
+}
+
 - (double) dist:(double)x1 y:(double)y1 {
     return sqrt((x-x1)*(x-x1) + (y-y1)*(y-y1)); 
 }

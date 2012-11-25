@@ -15,6 +15,7 @@
 
 - (Vec2f*) addE:(Vec2f*)vec mult:(double)mult;
 - (double) len;
+- (double) dist:(Vec2f*)v;
 - (double) dist:(double)x y:(double)y;
 - (Vec2f*) minus:(Vec2f*)v;
 - (Vec2f*) normaliseE;
