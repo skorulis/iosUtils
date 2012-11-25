@@ -13,6 +13,8 @@
 @property double x;
 @property double y;
 
++ (Vec2f*) vec:(double)x y:(double)y;
+- (id) initWithX:(double)x y:(double)y;
 - (Vec2f*) addE:(Vec2f*)vec mult:(double)mult;
 - (double) len;
 - (double) dist:(Vec2f*)v;

@@ -12,6 +12,16 @@
 
 @synthesize x,y;
 
++ (Vec2f*) vec:(double)x y:(double)y {
+    return [[Vec2f alloc] initWithX:x y:y];
+}
+
+- (id) initWithX:(double)x_ y:(double)y_ {
+    self = [super init];
+    self.x = x_;
+    self.y = y_;
+    return self;
+}
 
 - (Vec2f*) addE:(Vec2f*)vec mult:(double)mult {
     x+=vec.x*mult;
