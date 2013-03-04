@@ -15,6 +15,7 @@
     locker.autoresizingMask = view.autoresizingMask;
     locker.target = view;
     [locker setState:state];
+    [locker.target.superview addSubview:locker];
     return locker;
 }
 
