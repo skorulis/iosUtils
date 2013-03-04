@@ -8,6 +8,25 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    kUILockerStateLoading = 0,
+    kUILockerStateEmpty = 1,
+    kUILockerStateNormal = 2,
+    kUILockerStateError = 3
+    
+} UILockerState;
+
 @interface UILocker : UIView
+
+@property (nonatomic, weak) UIView* target;
+@property (nonatomic, strong) UILabel* label;
+@property (nonatomic, strong) UIActivityIndicatorView* activity;
+@property (nonatomic, assign) UILockerState state;
+
+@property (nonatomic, strong) NSString* emptyString;
+@property (nonatomic, strong) NSString* errorString;
+
++ (UILocker*) lockView:(UIView*)view state:(UILockerState)state;
+
 
 @end
