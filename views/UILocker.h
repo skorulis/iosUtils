@@ -28,5 +28,6 @@ typedef enum {
 
 + (UILocker*) lockView:(UIView*)view state:(UILockerState)state;
 
++ (void) setDefaultFont:(UIFont*)font;
 
 @end

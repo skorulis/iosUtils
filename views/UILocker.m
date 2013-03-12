@@ -8,6 +8,8 @@
 
 #import "UILocker.h"
 
+static UIFont* defaultFont;
+
 @implementation UILocker
 
 + (UILocker*) lockView:(UIView*)view state:(UILockerState)state {
@@ -16,7 +18,15 @@
     locker.target = view;
     [locker setState:state];
     [locker.target.superview addSubview:locker];
+    if(defaultFont) {
+        locker.label.font = defaultFont;
+    }
+    
     return locker;
+}
+
++ (void) setDefaultFont:(UIFont*)font {
+    defaultFont = font;
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -45,7 +55,7 @@
 }
 
 - (void) setState:(UILockerState)state {
-    self.label.hidden = state == kUILockerStateEmpty || state == kUILockerStateError;
+    self.label.hidden = state != kUILockerStateEmpty && state != kUILockerStateError;
     if(state == kUILockerStateEmpty) {
         self.label.text = self.emptyString;
     } else if(state == kUILockerStateError){
