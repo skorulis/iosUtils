@@ -18,4 +18,14 @@
     return [self dequeueReusableCellWithIdentifier:NSStringFromClass(c) forIndexPath:indexPath];
 }
 
+- (void) animateEmptyInsert:(int)count withRowAnimation:(UITableViewRowAnimation)rowAnimation {
+    [self beginUpdates];
+    NSMutableArray* n = [NSMutableArray new];
+    for(int i=0; i < count; ++i) {
+        [n addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+    }
+    [self insertRowsAtIndexPaths:n withRowAnimation:rowAnimation];
+    [self endUpdates];
+}
+
 @end
