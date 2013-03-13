@@ -7,6 +7,7 @@
 //
 
 #import "UILocker.h"
+#import "UIView+Additions.h"
 
 static UIFont* defaultFont;
 
@@ -49,13 +50,26 @@ static UIFont* defaultFont;
     self.errorString = NSLocalizedString(@"An error has occured", nil);
     self.userInteractionEnabled = self.activity.userInteractionEnabled = self.label.userInteractionEnabled = FALSE;
     
+    self.retryButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [self.retryButton setTitle:@"Retry" forState:UIControlStateNormal];
+    self.retryButton.frame = CGRectMake(200, 200, 60, 30);
+    [self.retryButton addTarget:self action:@selector(retryPressed) forControlEvents:UIControlEventTouchUpInside];
+    
     [self addSubview:self.activity];
     [self addSubview:self.label];
+    [self addSubview:self.retryButton];
     return self;
+}
+
+- (void) layoutSubviews {
+    [super layoutSubviews];
+    [self.retryButton centerInParentRounded];
+    self.retryButton.y += 35;
 }
 
 - (void) setState:(UILockerState)state {
     self.label.hidden = state != kUILockerStateEmpty && state != kUILockerStateError;
+    self.retryButton.hidden = state != kUILockerStateError;
     if(state == kUILockerStateEmpty) {
         self.label.text = self.emptyString;
     } else if(state == kUILockerStateError){
@@ -69,6 +83,10 @@ static UIFont* defaultFont;
     
     self.activity.hidden = state != kUILockerStateLoading;
     self.target.hidden = state != kUILockerStateNormal;
+}
+
+- (void) retryPressed {
+    
 }
 
 @end

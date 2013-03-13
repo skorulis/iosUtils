@@ -26,8 +26,14 @@ typedef enum {
 @property (nonatomic, strong) NSString* emptyString;
 @property (nonatomic, strong) NSString* errorString;
 
+@property (nonatomic, strong) UIButton* retryButton;
+
+//@property (nonatomic, copy) (^(void)) retryBlock;
+
 + (UILocker*) lockView:(UIView*)view state:(UILockerState)state;
 
 + (void) setDefaultFont:(UIFont*)font;
+
+
 
 @end
