@@ -48,7 +48,7 @@ static UIFont* defaultFont;
     
     self.emptyString = NSLocalizedString(@"No items to display", nil);
     self.errorString = NSLocalizedString(@"An error has occured", nil);
-    self.userInteractionEnabled = self.activity.userInteractionEnabled = self.label.userInteractionEnabled = FALSE;
+    self.activity.userInteractionEnabled = self.label.userInteractionEnabled = FALSE;
     
     self.retryButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.retryButton setTitle:@"Retry" forState:UIControlStateNormal];
@@ -69,7 +69,8 @@ static UIFont* defaultFont;
 
 - (void) setState:(UILockerState)state {
     self.label.hidden = state != kUILockerStateEmpty && state != kUILockerStateError;
-    self.retryButton.hidden = state != kUILockerStateError;
+    self.retryButton.hidden = state != kUILockerStateError || self.retryButton == nil;
+    self.userInteractionEnabled = state == kUILockerStateError;
     if(state == kUILockerStateEmpty) {
         self.label.text = self.emptyString;
     } else if(state == kUILockerStateError){
@@ -86,7 +87,7 @@ static UIFont* defaultFont;
 }
 
 - (void) retryPressed {
-    
+    self.retryBlock();
 }
 
 @end

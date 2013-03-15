@@ -28,7 +28,7 @@ typedef enum {
 
 @property (nonatomic, strong) UIButton* retryButton;
 
-//@property (nonatomic, copy) (^(void)) retryBlock;
+@property (nonatomic, copy) void (^retryBlock)(void);
 
 + (UILocker*) lockView:(UIView*)view state:(UILockerState)state;
 
