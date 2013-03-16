@@ -11,16 +11,19 @@
 @implementation DrawingContext
 
 @synthesize ctx = ctx;
+@synthesize scale = scale;
 
 + (DrawingContext*) getContext:(CGSize)size {
-    
-    DrawingContext* dc = [DrawingContext new];
-    dc.scale = [[UIScreen mainScreen] scale];
-    size.height*=dc.scale; size.width*=dc.scale;
-    UIGraphicsBeginImageContext(size);
-    dc.ctx = UIGraphicsGetCurrentContext();
-    
-    return dc;
+    return [[DrawingContext alloc] initWithSize:size];
+}
+
+- (id) initWithSize:(CGSize)size {
+    self = [super init];
+    scale = [[UIScreen mainScreen] scale];
+    UIGraphicsBeginImageContext(CGSizeMake(size.width*scale, size.height*scale));
+    ctx = UIGraphicsGetCurrentContext();
+    _size = size;
+    return self;
 }
 
 - (void) setFillColor:(UIColor *)fillColor {
@@ -29,6 +32,11 @@
 
 - (void) setLineWidth:(CGFloat)width {
     CGContextSetLineWidth(ctx, width*self.scale);
+}
+
+- (void) strokeElipse:(CGRect)rect {
+    CGRect sRect = CGRectMake(rect.origin.x*scale, rect.origin.y*scale, rect.size.width*scale, rect.size.height*scale);
+    CGContextStrokeEllipseInRect(ctx, sRect);
 }
 
 - (UIImage*) image {
