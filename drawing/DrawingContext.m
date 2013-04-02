@@ -11,7 +11,6 @@
 @implementation DrawingContext
 
 @synthesize ctx = ctx;
-@synthesize scale = scale;
 
 + (DrawingContext*) getContext:(CGSize)size {
     return [[DrawingContext alloc] initWithSize:size];
@@ -19,8 +18,7 @@
 
 - (id) initWithSize:(CGSize)size {
     self = [super init];
-    scale = [[UIScreen mainScreen] scale];
-    UIGraphicsBeginImageContext(CGSizeMake(size.width*scale, size.height*scale));
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0f);
     ctx = UIGraphicsGetCurrentContext();
     _size = size;
     return self;
@@ -30,13 +28,37 @@
     CGContextSetFillColorWithColor(self.ctx, fillColor.CGColor);
 }
 
+- (void) setStrokeColor:(UIColor*)color {
+    CGContextSetStrokeColorWithColor(ctx, color.CGColor);
+}
+
 - (void) setLineWidth:(CGFloat)width {
-    CGContextSetLineWidth(ctx, width*self.scale);
+    CGContextSetLineWidth(ctx, width);
 }
 
 - (void) strokeElipse:(CGRect)rect {
-    CGRect sRect = CGRectMake(rect.origin.x*scale, rect.origin.y*scale, rect.size.width*scale, rect.size.height*scale);
+    CGRect sRect = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
     CGContextStrokeEllipseInRect(ctx, sRect);
+}
+
+- (void) moveToPoint:(CGFloat)x y:(CGFloat)y {
+    CGContextMoveToPoint(ctx, x, y);
+}
+
+- (void) addLineToPoint:(CGFloat)x y:(CGFloat)y {
+    CGContextAddLineToPoint(ctx, x, y);
+}
+
+- (void) moveToPoint:(CGPoint)point {
+    CGContextMoveToPoint(ctx, point.x, point.y);
+}
+
+- (void) addElipseToPath:(CGRect)rect {
+    CGContextAddEllipseInRect(ctx, rect);
+}
+
+- (void) strokePath {
+    CGContextStrokePath(ctx);
 }
 
 - (UIImage*) image {
