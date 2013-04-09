@@ -13,5 +13,6 @@
 - (void) registerDefaultNibForClass:(Class)c;
 - (UITableViewCell*) dequeueDefaultCellForClass:(Class)c indexPath:(NSIndexPath*)indexPath;
 - (void) animateEmptyInsert:(int)count withRowAnimation:(UITableViewRowAnimation)rowAnimation;
+- (void) animateEmptyInsertForCounts:(NSArray*)counts withRowAnimation:(UITableViewRowAnimation)rowAnimation;
 
 @end

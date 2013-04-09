@@ -28,4 +28,17 @@
     [self endUpdates];
 }
 
+- (void) animateEmptyInsertForCounts:(NSArray*)counts withRowAnimation:(UITableViewRowAnimation)rowAnimation {
+    [self beginUpdates];
+    NSMutableArray* n = [NSMutableArray new];
+    for(int i = 0; i < counts.count; ++i) {
+        int count = [counts[i] intValue];
+        for(int j=0; j < count; ++j) {
+            [n addObject:[NSIndexPath indexPathForRow:j inSection:i]];
+        }
+    }
+    [self insertRowsAtIndexPaths:n withRowAnimation:rowAnimation];
+    [self endUpdates];
+}
+
 @end
