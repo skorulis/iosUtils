@@ -17,4 +17,6 @@
 
 - (void) centerInParentRounded;
 
+- (void) centerInParentVerticalRounded;
+
 @end

@@ -64,4 +64,8 @@
 	self.y =roundf( (self.superview.height - self.height) / 2.0f);
 }
 
+- (void) centerInParentVerticalRounded {
+	self.y = roundf((self.superview.height - self.height) / 2.0f);
+}
+
 @end
