@@ -8,20 +8,42 @@
 
 #import "IdListMap.h"
 
+@interface IdListMap () {
+    NSMutableArray* lists;
+}
+
+
+
+@end
+
 @implementation IdListMap
 
-@dynamic count;
+
+- (id)initWithSectionCount:(int)sections {
+    self = [super init];
+    _sectionCount = sections;
+    return [self commonInit];
+}
 
 - (id) init {
     self = [super init];
+    _sectionCount = 1;
+    return [self commonInit];
+}
+
+- (IdListMap*) commonInit {
     self.idMap = [NSMutableDictionary new];
-    self.idList = [NSArray new];
+    lists = [NSMutableArray new];
+    for(int i=0; i < _sectionCount; ++i) {
+        [lists addObject:[NSMutableArray new]];
+    }
     return self;
 }
 
-- (NSArray*) nextMissingIds:(int)count {
+- (NSArray*) nextMissingIds:(int)count section:(int)section {
     NSMutableArray* ret = [NSMutableArray new];
-    for(NSNumber* n in self.idList) {
+    NSArray* idList = lists[section];
+    for(NSNumber* n in idList) {
         if(self.idMap[n] == nil) {
             [ret addObject:n];
             if(ret.count >=count) {
@@ -32,13 +54,48 @@
     return ret;
 }
 
-- (NSUInteger) count {
-    return self.idList.count;
+- (NSUInteger)countForSection:(int)section {
+    return  ((NSArray*)lists[section]).count;
 }
 
-- (id) itemAtRow:(int)row {
-    id itemId = self.idList[row];
-    return self.idMap[itemId];
+- (id)itemAtIndexPath:(NSIndexPath*)indexPath {
+    NSArray* items = lists[indexPath.section];
+    return self.idMap[items[indexPath.row]];
+}
+
+- (void) setListForSection:(int)section ids:(NSArray*)ids {
+    NSMutableArray* a = lists[section];
+    [a removeAllObjects];
+    [a addObjectsFromArray:ids];
+}
+
+- (BOOL) hasId:(id)identifer inSection:(int)section {
+    NSArray* items = lists[section];
+    for(id item in items) {
+        if([item isEqual:identifer]) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+- (NSArray*)idsForSection:(int)section {
+    return lists[section];
+}
+
+- (int) indexOfId:(id)i section:(int)section {
+    NSArray* list = lists[section];
+    return [list indexOfObject:i];
+}
+
+- (void) removeId:(id)i fromSection:(int)section {
+    NSMutableArray* list = lists[section];
+    [list removeObject:i];
+}
+
+- (void) addId:(id)i inSection:(int)section {
+    NSMutableArray* list = lists[section];
+    [list addObject:i];
 }
 
 @end
