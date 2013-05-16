@@ -68,4 +68,12 @@
 	self.y = roundf((self.superview.height - self.height) / 2.0f);
 }
 
+- (void) centerInParentHorizontalRounded {
+	self.x =roundf( (self.superview.width  - self.width)  / 2.0f);
+}
+
+- (CGFloat) bottom {
+	return self.y + self.height;
+}
+
 @end
