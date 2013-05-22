@@ -16,6 +16,7 @@
 @property (nonatomic, strong) UIView* handleOuter;
 @property (nonatomic, strong) UIView* contentOuter;
 @property (nonatomic, strong) UIView* panView;
+@property (nonatomic, strong) UIView* handle;
 
 @property (nonatomic, strong) UIPanGestureRecognizer* pan;
 @property (nonatomic, assign) BOOL atTop;
@@ -86,17 +87,17 @@
 }
 
 - (void) reload {
-    UIView* handle = [self.delegate pullUpTabViewHandle:self];
+    self.handle = [self.delegate pullUpTabViewHandle:self];
     UIView* content = [self.delegate pullUpTabViewContent:self];
     
-    [self.handleOuter addSubview:handle];
-    [handle centerInParentHorizontalRounded];
+    [self.handleOuter addSubview:self.handle];
+    [self.handle centerInParentHorizontalRounded];
     
     [self.contentOuter addSubview:content];
     [content centerInParentHorizontalRounded];
     
     self.contentOuter.height = content.height;
-    self.handleOuter.height = handle.height;
+    self.handleOuter.height = self.handle.height;
     [self layoutSubviews];
 }
 
@@ -108,6 +109,14 @@
     CGFloat height = self.contentOuter.bottom - self.handleOuter.y;
     self.panView.frame = CGRectMake(0, self.handleOuter.y - PAN_Y_PAD, self.width, height + PAN_Y_PAD);
     
+}
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    if(point.y < self.handleOuter.y) { return FALSE;}
+    if(point.y > self.handleOuter.bottom) { return TRUE;}
+    if(point.x < self.handle.x) { return FALSE;}
+    if(point.x > self.handle.right) { return FALSE;}
+    return TRUE;
 }
 
 

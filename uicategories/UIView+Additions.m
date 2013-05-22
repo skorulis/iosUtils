@@ -10,6 +10,9 @@
 
 @implementation UIView (Additions)
 
+@dynamic bottom;
+@dynamic right;
+
 - (CGFloat) x
 {
 	return [self frame].origin.x;
@@ -74,6 +77,10 @@
 
 - (CGFloat) bottom {
 	return self.y + self.height;
+}
+
+- (CGFloat) right {
+    return self.x + self.width;
 }
 
 @end
