@@ -22,4 +22,8 @@ double randDM(double max) {
     return ((double)arc4random() / ARC4RANDOM_MAX);
 }
 
++ (BOOL)randB {
+    return arc4random() % 2 == 1;
+}
+
 @end

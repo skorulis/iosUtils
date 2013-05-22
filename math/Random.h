@@ -15,6 +15,7 @@ double randDM(double max);
 @interface Random : NSObject
 
 + (double)randD;
++ (BOOL)randB;
 
 
 @end
