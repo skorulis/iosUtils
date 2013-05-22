@@ -8,9 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol TableProxyDelegate <UITableViewDataSource,UITableViewDelegate>
+
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath realIndex:(NSIndexPath*)realPath;
+
+@end
+
 @interface FixedTableViewProxy : NSObject <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, weak) id<UITableViewDataSource> dataSource;
-@property (nonatomic, weak) id<UITableViewDelegate> delegate;
+@property (nonatomic, weak) id<TableProxyDelegate> delegate;
+@property (nonatomic, weak) UITableView* mainTableView;
+
+- (void) reload;
+
+- (id) initWithTableView:(UITableView*)tableView;
 
 @end
