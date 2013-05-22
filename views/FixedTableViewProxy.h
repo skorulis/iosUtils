@@ -19,8 +19,17 @@
 @property (nonatomic, weak) id<TableProxyDelegate> delegate;
 @property (nonatomic, weak) UITableView* mainTableView;
 
-- (void) reload;
 
 - (id) initWithTableView:(UITableView*)tableView;
+- (NSIndexPath*)deconvertIndexPath:(NSIndexPath*)indexPath;
+- (void) buildCache;
+
+//Table view methods
+
+- (void) reloadData;
+- (NSIndexPath*)indexPathForCell:(UITableViewCell*)cell;
+- (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation;
+- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation;
+- (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation;
 
 @end

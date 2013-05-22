@@ -25,14 +25,13 @@
     return self;
 }
 
-- (void) reload {
+- (void) buildCache {
     sections = [self.delegate numberOfSectionsInTableView:self.mainTableView];
     counts = [NSMutableArray new];
     for(int i=0; i < sections; ++i) {
         int rows = [self.delegate tableView:self.mainTableView numberOfRowsInSection:i];
         [counts addObject:@(rows)];
     }
-    [self.mainTableView reloadData];
 }
 
 - (int) numberOfSectionsInTableView:(UITableView *)tableView {
@@ -98,6 +97,46 @@
     }
 }
 
+#pragma mark UITableView overrides
+
+- (void) reloadData {
+    [self buildCache];
+    [self.mainTableView reloadData];
+}
+
+- (NSIndexPath*)indexPathForCell:(UITableViewCell*)cell {
+    NSIndexPath* indexPath = [self.mainTableView indexPathForCell:cell];
+    return [self convertIndexPath:indexPath];
+}
+
+- (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation {
+    NSMutableArray* paths = [NSMutableArray new];
+    for(NSIndexPath* p in indexPaths) {
+        [paths addObject:[self deconvertIndexPath:p]];
+    }
+    [self buildCache];
+    [self.mainTableView insertRowsAtIndexPaths:paths withRowAnimation:animation];
+    
+}
+
+- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation {
+    NSMutableArray* paths = [NSMutableArray new];
+    for(NSIndexPath* p in indexPaths) {
+        [paths addObject:[self deconvertIndexPath:p]];
+    }
+    [self buildCache];
+    [self.mainTableView deleteRowsAtIndexPaths:paths withRowAnimation:animation];
+}
+
+- (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation {
+    NSMutableArray* paths = [NSMutableArray new];
+    for(NSIndexPath* p in indexPaths) {
+        [paths addObject:[self deconvertIndexPath:p]];
+        NSLog(@"Reload %@ for %@",p,[self deconvertIndexPath:p]);
+    }
+    [self buildCache];
+    [self.mainTableView reloadRowsAtIndexPaths:paths withRowAnimation:animation];
+}
 
 #pragma mark helper methods
 
@@ -116,6 +155,16 @@
         remaining-=n.intValue;
     }
     return nil;
+}
+
+- (NSIndexPath*)deconvertIndexPath:(NSIndexPath*)indexPath {
+    int row = 0;
+    for(int i=0; i < indexPath.section; ++i) {
+        NSNumber* n = counts[i];
+        row+=(n.intValue + 1);
+    }
+    row+=(indexPath.row + 1);
+    return [NSIndexPath indexPathForRow:row inSection:0];
 }
 
 - (UITableViewCell*)cellForHeaderInSection:(int)section {
