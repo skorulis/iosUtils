@@ -30,10 +30,11 @@ typedef enum {
 
 @property (nonatomic, copy) void (^retryBlock)(void);
 
-+ (UILocker*) lockView:(UIView*)view state:(UILockerState)state;
+//+ (UILocker*) lockView:(UIView*)view state:(UILockerState)state;
+- (id) initWithView:(UIView*)view state:(UILockerState)state;
 
 + (void) setDefaultFont:(UIFont*)font;
-
+- (id) commonInit;
 
 
 @end

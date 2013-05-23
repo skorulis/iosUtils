@@ -16,6 +16,7 @@
 @property (nonatomic, assign) CGFloat height;
 @property (nonatomic, assign, readonly) CGFloat bottom;
 @property (nonatomic, assign, readonly) CGFloat right;
+@property (nonatomic, assign) CGSize size;
 
 
 - (void) centerInParentRounded;

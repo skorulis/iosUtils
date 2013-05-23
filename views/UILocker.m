@@ -26,6 +26,19 @@ static UIFont* defaultFont;
     return locker;
 }
 
+- (id) initWithView:(UIView*)view state:(UILockerState)state {
+    self = [super initWithFrame:view.frame];
+    self.autoresizingMask = view.autoresizingMask;
+    self.target = view;
+    [self setState:state];
+    [self.target.superview addSubview:self];
+    if(defaultFont) {
+        self.label.font = defaultFont;
+    }
+    [self commonInit];
+    return self;
+}
+
 + (void) setDefaultFont:(UIFont*)font {
     defaultFont = font;
 }
@@ -50,7 +63,7 @@ static UIFont* defaultFont;
     self.errorString = NSLocalizedString(@"An error has occured", nil);
     self.activity.userInteractionEnabled = self.label.userInteractionEnabled = FALSE;
     
-    self.retryButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.retryButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.retryButton setTitle:@"Retry" forState:UIControlStateNormal];
     self.retryButton.frame = CGRectMake(200, 200, 60, 30);
     [self.retryButton addTarget:self action:@selector(retryPressed) forControlEvents:UIControlEventTouchUpInside];

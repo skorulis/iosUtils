@@ -12,6 +12,10 @@
 
 @dynamic bottom;
 @dynamic right;
+@dynamic x;
+@dynamic y;
+@dynamic width;
+@dynamic height;
 
 - (CGFloat) x
 {
@@ -37,30 +41,35 @@
 	[self setFrame:rect];
 }
 
-- (CGFloat) width
-{
+- (CGFloat) width {
 	return [self frame].size.width;
 }
 
-- (void) setWidth: (CGFloat) width
-{
+- (void) setWidth: (CGFloat) width {
 	CGRect rect = [self frame];
 	rect.size.width = width;
 	[self setFrame:rect];
 }
 
-- (CGFloat) height
-{
+- (CGFloat) height {
 	return [self frame].size.height;
 }
 
-- (void) setHeight: (CGFloat) height
-{
+- (void) setHeight: (CGFloat) height {
 	CGRect rect = [self frame];
 	rect.size.height = height;
 	[self setFrame:rect];
 }
 
+- (CGSize) size {
+    return self.frame.size;
+}
+
+- (void) setSize:(CGSize)size {
+    CGRect rect = [self frame];
+    rect.size = size;
+    [self setFrame:rect];
+}
 
 - (void) centerInParentRounded {
 	self.x =roundf( (self.superview.width  - self.width)  / 2.0f);
