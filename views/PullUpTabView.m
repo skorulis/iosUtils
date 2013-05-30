@@ -17,8 +17,10 @@
 @property (nonatomic, strong) UIView* contentOuter;
 @property (nonatomic, strong) UIView* panView;
 @property (nonatomic, strong) UIView* handle;
+@property (nonatomic, strong) UIView* spinningHandle;
 
 @property (nonatomic, strong) UIPanGestureRecognizer* pan;
+@property (nonatomic, strong) UITapGestureRecognizer* tap;
 @property (nonatomic, assign) BOOL atTop;
 
 @end
@@ -36,8 +38,9 @@
     [self addSubview:self.panView];
     
     self.pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panned:)];
-    
+    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
     [self.panView addGestureRecognizer:self.pan];
+    [self.panView addGestureRecognizer:self.tap];
 }
 
 - (void) panned:(UIPanGestureRecognizer*)gesture {
@@ -56,6 +59,8 @@
         self.handleOuter.y = y;
         self.panView.y = y - PAN_Y_PAD;
         self.contentOuter.y = self.handleOuter.bottom;
+        float pct = 1-(y-min)/(max - min);
+        self.spinningHandle.transform = CGAffineTransformMakeRotation(M_PI*pct);
         
     } else if(gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateFailed) {
         CGFloat mid = (min + max)/2;
@@ -64,18 +69,42 @@
             if(y < mid) {
                 self.atTop = TRUE;
                 animPos = min;
+                self.spinningHandle.transform = CGAffineTransformMakeRotation(M_PI);
             } else {
                 self.atTop = FALSE;
                 animPos = max;
+                self.spinningHandle.transform = CGAffineTransformIdentity;
             }
             self.handleOuter.y = animPos;
             self.panView.y = animPos;
             self.contentOuter.y = self.handleOuter.bottom;
         }];
-        
-        
     }
+}
 
+- (void) tapped:(UITapGestureRecognizer*)tap {
+    if(tap.state == UIGestureRecognizerStateRecognized) {
+        [self toggleState];
+    }
+}
+
+- (void) toggleState {
+    CGFloat min = [self handleMinY]; CGFloat max = [self handleMaxY];
+    [UIView animateWithDuration:0.29f animations:^{
+        CGFloat animPos;
+        if(!self.atTop) {
+            self.atTop = TRUE;
+            animPos = min;
+            self.spinningHandle.transform = CGAffineTransformMakeRotation(M_PI);
+        } else {
+            self.atTop = FALSE;
+            animPos = max;
+            self.spinningHandle.transform = CGAffineTransformIdentity;
+        }
+        self.handleOuter.y = animPos;
+        self.panView.y = animPos;
+        self.contentOuter.y = self.handleOuter.bottom;
+    }];
 }
 
 - (CGFloat) handleMinY {
@@ -88,6 +117,11 @@
 
 - (void) reload {
     self.handle = [self.delegate pullUpTabViewHandle:self];
+    self.spinningHandle = [self.delegate pullUpTabViewSpinningHandle:self];
+    
+    [self.handle addSubview:self.spinningHandle];
+    [self.spinningHandle centerInParentRounded];
+    
     UIView* content = [self.delegate pullUpTabViewContent:self];
     
     [self.handleOuter addSubview:self.handle];

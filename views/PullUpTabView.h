@@ -14,6 +14,7 @@
 
 - (UIView*) pullUpTabViewContent:(PullUpTabView*)pullUp;
 - (UIView*) pullUpTabViewHandle:(PullUpTabView*)pullUp;
+- (UIView*) pullUpTabViewSpinningHandle:(PullUpTabView*)pullUp;
 
 @end
 
@@ -22,5 +23,6 @@
 @property (nonatomic, strong) id<PullUpTabDelegate> delegate;
 
 - (void) reload;
+- (void) toggleState;
 
 @end
