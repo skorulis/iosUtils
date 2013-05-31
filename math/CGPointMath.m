@@ -25,4 +25,8 @@
     return sqrt(p1.x*p1.x + p1.y*p1.y);
 }
 
++ (CGFloat) dotProduct:(CGPoint)p1 p2:(CGPoint)p2 {
+    return p1.x*p2.x + p1.y*p2.y;
+}
+
 @end
