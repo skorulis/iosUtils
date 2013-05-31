@@ -11,5 +11,6 @@
 @interface UIImage (Additions)
 
 - (UIImage*) fullStretchable;
++ (UIImage *) imageWithView:(UIView *)view;
 
 @end
