@@ -3,7 +3,7 @@
 //  nodewar
 //
 //  Created by Alex Skorulis on 26/02/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Skorulis.com. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

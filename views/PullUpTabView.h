@@ -3,7 +3,7 @@
 //  pulltest
 //
 //  Created by Alex Skorulis on 14/05/2013.
-//  Copyright (c) 2013 Thomson Reuters. All rights reserved.
+//  Copyright (c) 2013 Skorulis.com. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

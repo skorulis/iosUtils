@@ -3,7 +3,7 @@
 //  phringly
 //
 //  Created by Alex Skorulis on 31/05/2013.
-//  Copyright (c) 2013 Thomson Reuters. All rights reserved.
+//  Copyright (c) 2013 Skorulis.com. All rights reserved.
 //
 
 #import "CGPointMath.h"
@@ -28,5 +28,20 @@
 + (CGFloat) dotProduct:(CGPoint)p1 p2:(CGPoint)p2 {
     return p1.x*p2.x + p1.y*p2.y;
 }
+
++ (CGFloat) rotation:(CGPoint)point {
+    if(point.x==0) {
+        return (point.y <0)?3*M_PI_2:M_PI_2;
+    }
+    CGFloat rot = atanf(point.y/point.x);
+    if( point.x < 0 ) {
+        return rot+M_PI;
+    }
+    if(point.x > 0 && point.y < 0) {
+        return rot+2*M_PI;
+    }
+    return rot;
+}
+
 
 @end
