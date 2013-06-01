@@ -12,5 +12,6 @@
 
 - (UIImage*) fullStretchable;
 + (UIImage *) imageWithView:(UIView *)view;
++ (UIImage *) imageWithLayer:(CALayer*)layer;
 
 @end

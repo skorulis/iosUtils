@@ -27,4 +27,14 @@
     return img;
 }
 
++ (UIImage *) imageWithLayer:(CALayer*)layer {
+    UIGraphicsBeginImageContextWithOptions(layer.bounds.size, layer.opaque, 0.0);
+    [layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return img;
+}
+
 @end
