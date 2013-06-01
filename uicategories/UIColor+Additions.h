@@ -22,7 +22,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 @interface UIColor (Additions)
 
 + (UIColor*) randColor;
-
 - (NSString*)rgbText;
+- (int) hexValue;
 
 @end

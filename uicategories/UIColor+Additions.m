@@ -25,4 +25,12 @@
     return [NSString stringWithFormat:@"%f %f %f %f",red,green,blue,alpha];
 }
 
+- (int) hexValue {
+    float rf,gf,bf,af;
+    [self getRed:&rf green:&gf blue:&bf alpha:&af];
+    int r,g,b;
+    r = rf*255; g = rf*255; b = rf*255;
+    return r << 16 + g << 8 + b;
+}
+
 @end
