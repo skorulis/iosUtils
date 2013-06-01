@@ -26,11 +26,30 @@
 }
 
 - (int) hexValue {
-    float rf,gf,bf,af;
+    CGColorSpaceRef space = CGColorGetColorSpace(self.CGColor);
+    size_t comps = CGColorSpaceGetNumberOfComponents(space);
+    if(comps == 3) {
+        return self.hexValueRGB;
+    } else if(comps == 1) {
+        return self.hexValueWhite;
+    }
+    NSAssert(FALSE,@"Unknown colour space %@",self);
+    return 0;
+}
+
+- (int) hexValueWhite {
+    CGFloat wf,af;
+    [self getWhite:&wf alpha:&af];
+    int w = wf*255;
+    return (w << 16) + (w << 8) + w;
+}
+
+- (int) hexValueRGB {
+    CGFloat rf,gf,bf,af;
     [self getRed:&rf green:&gf blue:&bf alpha:&af];
     int r,g,b;
-    r = rf*255; g = rf*255; b = rf*255;
-    return r << 16 + g << 8 + b;
+    r = rf*255; g = gf*255; b = bf*255;
+    return (r << 16) + (g << 8) + b;
 }
 
 @end
