@@ -13,5 +13,6 @@
 - (UIImage*) fullStretchable;
 + (UIImage *) imageWithView:(UIView *)view;
 + (UIImage *) imageWithLayer:(CALayer*)layer;
+- (UIImage *) cropToCentreSquare;
 
 @end

@@ -37,4 +37,18 @@
     return img;
 }
 
+- (UIImage *) cropToCentreSquare {
+    int min = MIN(self.size.width,self.size.height);
+    double x = (self.size.width - min) / 2.0;
+    double y = (self.size.height - min) / 2.0;
+    
+    CGRect cropRect = CGRectMake(x, y, min, min);
+    CGImageRef imageRef = CGImageCreateWithImageInRect([self CGImage], cropRect);
+    
+    UIImage *cropped = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    
+    return cropped;
+}
+
 @end
