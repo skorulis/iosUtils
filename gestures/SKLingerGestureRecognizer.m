@@ -42,6 +42,7 @@
 }
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self.timer invalidate]; self.timer = nil;
     self.state = UIGestureRecognizerStateEnded;
 }
 
