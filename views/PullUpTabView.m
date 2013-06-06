@@ -10,6 +10,7 @@
 #import "UIView+Additions.h"
 
 #define PAN_Y_PAD 10
+#define PAN_X_PAD 10
 
 @interface PullUpTabView ()
 
@@ -41,6 +42,21 @@
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
     [self.panView addGestureRecognizer:self.pan];
     [self.panView addGestureRecognizer:self.tap];
+}
+
+- (void) setDirection:(PullUpTabDirection)direction {
+    _direction = direction;
+    if(self.direction == kPullUpTabBottom) {
+        self.handleOuter = [[UIView alloc] initWithFrame:CGRectMake(0, self.height, self.width, 0)];
+        self.contentOuter = [[UIView alloc] initWithFrame:CGRectMake(0, self.height, self.width, 0)];
+        self.panView = [[UIView alloc] initWithFrame:CGRectMake(0, self.height, self.width, 0)];
+    } else if(self.direction == kPullUpTabTop) {
+        
+    } else if(self.direction == kPullUpTabRight) {
+
+    } else if(self.direction == kPullUpTabLeft) {
+        
+    }
 }
 
 - (void) panned:(UIPanGestureRecognizer*)gesture {
@@ -118,31 +134,58 @@
 - (void) reload {
     self.handle = [self.delegate pullUpTabViewHandle:self];
     self.spinningHandle = [self.delegate pullUpTabViewSpinningHandle:self];
+    UIView* content = [self.delegate pullUpTabViewContent:self];
     
     [self.handle addSubview:self.spinningHandle];
     [self.spinningHandle centerInParentRounded];
     
-    UIView* content = [self.delegate pullUpTabViewContent:self];
-    
     [self.handleOuter addSubview:self.handle];
-    [self.handle centerInParentHorizontalRounded];
+    if([self isVertical]) {
+        [self.handle centerInParentHorizontalRounded];
+    } else {
+        [self.handle centerInParentVerticalRounded];
+    }
+    
     
     [self.contentOuter addSubview:content];
-    [content centerInParentHorizontalRounded];
+    if([self isVertical]) {
+        [content centerInParentHorizontalRounded];
+    } else {
+        [content centerInParentVerticalRounded];
+    }
+    
     
     self.contentOuter.height = content.height;
     self.handleOuter.height = self.handle.height;
     [self layoutSubviews];
 }
 
+- (BOOL) isHorizontal {
+    return self.direction == kPullUpTabRight || self.direction == kPullUpTabLeft;
+}
+
+- (BOOL) isVertical {
+    return self.direction == kPullUpTabBottom || self.direction == kPullUpTabTop;
+}
+
 - (void) layoutSubviews {
     [super layoutSubviews];
-    
-    self.handleOuter.y = self.height - self.handleOuter.height;
-    self.contentOuter.y = self.height;
-    CGFloat height = self.contentOuter.bottom - self.handleOuter.y;
-    self.panView.frame = CGRectMake(0, self.handleOuter.y - PAN_Y_PAD, self.width, height + PAN_Y_PAD);
-    
+    if(self.direction == kPullUpTabBottom) {
+        self.handleOuter.y = self.height - self.handleOuter.height;
+        self.contentOuter.y = self.height;
+        CGFloat height = self.contentOuter.bottom - self.handleOuter.y;
+        self.panView.frame = CGRectMake(0, self.handleOuter.y - PAN_Y_PAD, self.width, height + PAN_Y_PAD);
+    } else if(self.direction == kPullUpTabTop) {
+        
+    } else if(self.direction == kPullUpTabRight) {
+        self.handleOuter.x = self.width - self.handleOuter.width;
+        self.contentOuter.x = self.width;
+        CGFloat width = self.contentOuter.right - self.handleOuter.x;
+        //       self.panView.frame = CGRectMake(0, self.handleOuter.y - PAN_X_PAD, self.width, width + PAN_X_PAD);
+    } else if(self.direction == kPullUpTabLeft) {
+        
+    }
+   
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
