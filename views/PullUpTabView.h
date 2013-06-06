@@ -10,6 +10,14 @@
 
 @class PullUpTabView;
 
+typedef enum {
+    kPullUpTabBottom,
+    kPullUpTabTop,
+    kPullUpTabLeft,
+    kPullUpTabRight
+    
+} PullUpTabDirection;
+
 @protocol PullUpTabDelegate <NSObject>
 
 - (UIView*) pullUpTabViewContent:(PullUpTabView*)pullUp;
@@ -20,6 +28,7 @@
 
 @interface PullUpTabView : UIView
 
+@property (nonatomic, assign) PullUpTabDirection direction;
 @property (nonatomic, strong) id<PullUpTabDelegate> delegate;
 
 - (void) reload;
