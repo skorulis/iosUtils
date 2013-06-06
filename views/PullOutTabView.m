@@ -34,8 +34,6 @@
     [self addSubview:self.handleOuter];
     [self addSubview:self.contentOuter];
     
-    self.backgroundColor = [UIColor greenColor];
-    
     self.pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panned:)];
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
     [self.handleOuter addGestureRecognizer:self.pan];
@@ -72,26 +70,50 @@
 
 - (void) toggleState {
     self.tabOpen = !self.tabOpen;
-    [self layoutSubviews];
+    [UIView animateWithDuration:0.35f animations:^{
+        [self layoutSubviews];
+    }];
 }
 
 #pragma mark handling all 4 cases
 
-- (CGFloat) handleMinY {
-    return self.height - self.handleOuter.height - self.contentOuter.height;
+- (CGFloat) handleMinValue {
+    switch (self.direction) {
+        case kPullOutTabBottom:
+            return self.height - self.handleOuter.height - self.contentOuter.height;
+        case kPullOutTabTop:
+            return 0;
+        case kPullOutTabLeft:
+            return 0;
+        case kPullOutTabRight:
+            return self.width - self.handleOuter.width - self.contentOuter.width;
+    }
 }
 
-- (CGFloat) handleMaxY {
-    return self.height - self.handleOuter.height;
+- (CGFloat) handleMaxValue {
+    switch (self.direction) {
+        case kPullOutTabBottom:
+            return self.height - self.handleOuter.height;
+        case kPullOutTabTop:
+            return self.contentOuter.height;
+        case kPullOutTabLeft:
+            return self.contentOuter.width;
+        case kPullOutTabRight:
+            return self.width - self.handleOuter.width;
+    }
 }
 
-- (CGFloat) handleMinX {
-    return self.width - self.handleOuter.width - self.contentOuter.width;
+- (CGFloat) desiredPosition:(CGPoint)trans min:(CGFloat)min max:(CGFloat)max {
+    switch (self.direction) {
+        case kPullOutTabBottom:
+            return self.tabOpen ? (min + trans.y) : (max + trans.y);
+        case kPullOutTabTop:
+        case kPullOutTabLeft:
+        case kPullOutTabRight:
+            return self.tabOpen ? (min + trans.x) : (max + trans.x);
+    }
 }
 
-- (CGFloat) handleMaxX {
-    return self.width - self.handleOuter.width;
-}
 
 - (BOOL) isHorizontal {
     return self.direction == kPullOutTabRight || self.direction == kPullOutTabLeft;
@@ -112,16 +134,37 @@
 #pragma mark gestures
 
 - (void) panned:(UIPanGestureRecognizer*)gesture {
-    CGPoint trans = [gesture translationInView:self];
-    
+    CGPoint transPoint = [gesture translationInView:self];
+    CGFloat min = [self handleMinValue]; CGFloat max = [self handleMaxValue];
+    CGFloat value = [self desiredPosition:transPoint min:min max:max];
+
+    if(gesture.state == UIGestureRecognizerStateChanged) {
+        value = MIN(value,max);
+        value = MAX(value,min);
+        if([self isHorizontal]) {
+            self.handleOuter.x = value;
+            self.contentOuter.x = self.handleOuter.right;
+        } else {
+            self.handleOuter.y = value;
+            self.contentOuter.y = self.handleOuter.bottom;
+        }
+    } else if(gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateFailed) {
+        CGFloat mid = (min + max)/2;
+        if(value < mid) {
+            self.tabOpen = YES;
+        } else {
+            self.tabOpen = FALSE;
+        }
+        [UIView animateWithDuration:0.35f animations:^{
+            [self layoutSubviews];
+        }];
+        
+    }
 }
 
 - (void) tapped:(UITapGestureRecognizer*)tap {
     if(tap.state == UIGestureRecognizerStateRecognized) {
-        [UIView animateWithDuration:0.35f animations:^{
-            [self toggleState];
-        }];
-        
+        [self toggleState];
     }
 }
 
