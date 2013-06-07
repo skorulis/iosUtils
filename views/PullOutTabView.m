@@ -20,8 +20,6 @@
 @property (nonatomic, strong) UIPanGestureRecognizer* pan;
 @property (nonatomic, strong) UITapGestureRecognizer* tap;
 
-@property (nonatomic, assign) BOOL tabOpen;
-
 @end
 
 @implementation PullOutTabView
@@ -161,11 +159,16 @@
         self.spinningHandle.transform = CGAffineTransformMakeRotation(M_PI*pct);
     } else if(gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateFailed) {
         CGFloat mid = (min + max)/2;
+        BOOL newTabState;
         if( (value < mid && [self isPullUp]) || (value > mid && [self isPullDown]) ) {
-            self.tabOpen = YES;
+            newTabState = YES;
         } else {
-            self.tabOpen = FALSE;
+            newTabState = FALSE;
         }
+        if(newTabState != self.tabOpen) {
+            [self.delegate pullUpTabStateChanged:self];
+        }
+        self.tabOpen = newTabState;
         [UIView animateWithDuration:0.35f animations:^{
             [self layoutSubviews];
         }];
