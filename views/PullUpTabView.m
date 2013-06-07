@@ -53,7 +53,9 @@
     } else if(self.direction == kPullUpTabTop) {
         
     } else if(self.direction == kPullUpTabRight) {
-
+        self.handleOuter = [[UIView alloc] initWithFrame:CGRectMake(self.width, 0, 0, self.height)];
+        self.contentOuter = [[UIView alloc] initWithFrame:CGRectMake(self.width, 0, 0, self.height)];
+        self.panView = [[UIView alloc] initWithFrame:CGRectMake(self.width, 0, 0, self.height)];
     } else if(self.direction == kPullUpTabLeft) {
         
     }
@@ -146,7 +148,6 @@
         [self.handle centerInParentVerticalRounded];
     }
     
-    
     [self.contentOuter addSubview:content];
     if([self isVertical]) {
         [content centerInParentHorizontalRounded];
@@ -154,9 +155,14 @@
         [content centerInParentVerticalRounded];
     }
     
+    if([self isVertical]) {
+        self.contentOuter.height = content.height;
+        self.handleOuter.height = self.handle.height;
+    } else {
+        self.contentOuter.width = content.width;
+        self.handleOuter.width = self.handle.width;
+    }
     
-    self.contentOuter.height = content.height;
-    self.handleOuter.height = self.handle.height;
     [self layoutSubviews];
 }
 
@@ -181,11 +187,18 @@
         self.handleOuter.x = self.width - self.handleOuter.width;
         self.contentOuter.x = self.width;
         CGFloat width = self.contentOuter.right - self.handleOuter.x;
-        //       self.panView.frame = CGRectMake(0, self.handleOuter.y - PAN_X_PAD, self.width, width + PAN_X_PAD);
+        //self.panView.frame = CGRectMake(0, self.handleOuter.y - PAN_X_PAD, self.width, width + PAN_X_PAD);
     } else if(self.direction == kPullUpTabLeft) {
         
     }
-   
+    self.handleOuter.x = 0;
+    self.contentOuter.x = 0;
+    self.handleOuter.backgroundColor = [UIColor redColor];
+    self.contentOuter.backgroundColor = [UIColor blueColor];
+    self.backgroundColor = [UIColor greenColor];
+    NSLog(@"handle pos %@",NSStringFromCGRect(self.handleOuter.frame));
+    NSLog(@"handle pos %@",NSStringFromCGRect(self.handle.frame));
+    NSLog(@"frame %@",NSStringFromCGRect(self.frame));
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
