@@ -63,9 +63,11 @@
     } else if(self.direction == kPullOutTabRight) {
         self.handleOuter.x = self.width - self.handleOuter.width - (_tabOpen ? self.contentOuter.width : 0);
         self.contentOuter.x = self.width - (_tabOpen ? self.contentOuter.width : 0);
+    } else if(self.direction == kPullOutTabLeft) {
+        self.handleOuter.x = 0 + (_tabOpen ? self.contentOuter.width : 0);
+        self.contentOuter.x = self.handleOuter.x - self.contentOuter.width;
     }
-    
-    NSLog(@"Frame %@",NSStringFromCGRect(self.handleOuter.frame));
+    self.spinningHandle.transform = self.tabOpen ? CGAffineTransformMakeRotation(M_PI) : CGAffineTransformIdentity;
 }
 
 - (void) toggleState {
@@ -108,7 +110,9 @@
         case kPullOutTabBottom:
             return self.tabOpen ? (min + trans.y) : (max + trans.y);
         case kPullOutTabTop:
+            return self.tabOpen ? (max + trans.y) : (min + trans.y);
         case kPullOutTabLeft:
+            return self.tabOpen ? (max + trans.x) : (min + trans.x);
         case kPullOutTabRight:
             return self.tabOpen ? (min + trans.x) : (max + trans.x);
     }
@@ -141,16 +145,23 @@
     if(gesture.state == UIGestureRecognizerStateChanged) {
         value = MIN(value,max);
         value = MAX(value,min);
-        if([self isHorizontal]) {
-            self.handleOuter.x = value;
-            self.contentOuter.x = self.handleOuter.right;
-        } else {
+        if(self.direction == kPullOutTabBottom) {
             self.handleOuter.y = value;
             self.contentOuter.y = self.handleOuter.bottom;
+        } else if(self.direction == kPullOutTabTop) {
+            
+        } else if(self.direction == kPullOutTabRight) {
+            self.handleOuter.x = value;
+            self.contentOuter.x = self.handleOuter.right;
+        } else if(self.direction == kPullOutTabLeft) {
+            self.handleOuter.x = value;
+            self.contentOuter.x = self.handleOuter.x - self.contentOuter.width;
         }
+        float pct = 1-(value-min)/(max - min);
+        self.spinningHandle.transform = CGAffineTransformMakeRotation(M_PI*pct);
     } else if(gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateFailed) {
         CGFloat mid = (min + max)/2;
-        if(value < mid) {
+        if( (value < mid && [self isPullUp]) || (value > mid && [self isPullDown]) ) {
             self.tabOpen = YES;
         } else {
             self.tabOpen = FALSE;
