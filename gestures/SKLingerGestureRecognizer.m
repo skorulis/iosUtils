@@ -27,8 +27,10 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    if(touches.count > 1) {
-        self.state = UIGestureRecognizerStateFailed;
+    if(touches.count > 1 || lingered) {
+        NSLog(@"FAIL ");
+    } else if(lingered) {
+        self.state = UIGestureRecognizerStateEnded;
     } else {
         touchesStarted = TRUE;
         self.state = UIGestureRecognizerStatePossible;
