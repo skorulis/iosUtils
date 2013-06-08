@@ -68,9 +68,10 @@
     self.spinningHandle.transform = self.tabOpen ? CGAffineTransformMakeRotation(M_PI) : CGAffineTransformIdentity;
 }
 
-- (void) toggleState {
+- (void) toggleState:(BOOL)animated {
     self.tabOpen = !self.tabOpen;
-    [UIView animateWithDuration:0.35f animations:^{
+    float duration = animated ? 0.35f : 0;
+    [UIView animateWithDuration:duration animations:^{
         [self layoutSubviews];
     }];
 }
@@ -178,7 +179,7 @@
 
 - (void) tapped:(UITapGestureRecognizer*)tap {
     if(tap.state == UIGestureRecognizerStateRecognized) {
-        [self toggleState];
+        [self toggleState:TRUE];
     }
 }
 

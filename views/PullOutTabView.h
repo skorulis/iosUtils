@@ -35,6 +35,6 @@ typedef enum {
 @property (nonatomic, assign) BOOL tabOpen;
 
 - (void) reload;
-- (void) toggleState;
+- (void) toggleState:(BOOL)animated;
 
 @end

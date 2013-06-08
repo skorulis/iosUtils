@@ -27,13 +27,16 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     NSLog(@"Began");
-    self.state = UIGestureRecognizerStatePossible;
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:self.lingerTime target:self selector:@selector(recognize) userInfo:nil repeats:NO];
+    if(touches.count > 1) {
+        self.state = UIGestureRecognizerStateFailed;
+    } else {
+        self.state = UIGestureRecognizerStatePossible;
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:self.lingerTime target:self selector:@selector(recognize) userInfo:nil repeats:NO];
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"Moved");
-    if(lingered) {
+    if(lingered && touches.count == 1) {
         self.state = UIGestureRecognizerStateChanged;
     } else {
         [self.timer invalidate]; self.timer = nil;
