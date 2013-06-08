@@ -11,6 +11,7 @@
 
 @interface SKLingerGestureRecognizer () {
     BOOL lingered;
+    BOOL touchesStarted;
 }
 
 @property (nonatomic, strong) NSTimer* timer;
@@ -26,10 +27,10 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"Began");
     if(touches.count > 1) {
         self.state = UIGestureRecognizerStateFailed;
     } else {
+        touchesStarted = TRUE;
         self.state = UIGestureRecognizerStatePossible;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:self.lingerTime target:self selector:@selector(recognize) userInfo:nil repeats:NO];
     }
@@ -45,6 +46,8 @@
 }
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"Ended touches %d",touches.count);
+    touchesStarted = FALSE;
     [self.timer invalidate]; self.timer = nil;
     self.state = UIGestureRecognizerStateEnded;
 }
@@ -59,6 +62,7 @@
 - (void) reset {
     [super reset];
     lingered = FALSE;
+    touchesStarted = FALSE;
 }
 
 @end
