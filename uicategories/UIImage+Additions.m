@@ -43,8 +43,8 @@
     UIImage* tmp = [self fixOrientation];
     
     int min = MIN(tmp.size.width,tmp.size.height);
-    double x = (tmp.size.width - min) / 2.0;
-    double y = (tmp.size.height - min) / 2.0;
+    int x = (tmp.size.width - min) / 2.0;
+    int y = (tmp.size.height - min) / 2.0;
     
     CGRect cropRect = CGRectMake(x, y, min, min);
     CGImageRef imageRef = CGImageCreateWithImageInRect([tmp CGImage], cropRect);
