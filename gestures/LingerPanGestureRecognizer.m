@@ -39,6 +39,16 @@
     }
 }
 
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesEnded:touches withEvent:event];
+    [self.timer invalidate]; self.timer = nil;
+}
+
+- (void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesCancelled:touches withEvent:event];
+    [self.timer invalidate]; self.timer = nil;
+}
+
 - (void) lingered {
     NSLog(@"Lingered");
     self.timer = nil;
@@ -53,9 +63,32 @@
 }
 
 - (void) setState:(UIGestureRecognizerState)state {
-    NSLog(@"Moved to state %d",state);
-    [self.timer invalidate]; self.timer = nil;
     [super setState:state];
+    NSLog(@"Moved to state %@",[self nameForState:state]);
+    [self.timer invalidate]; self.timer = nil;
+    if(state == UIGestureRecognizerStateFailed) {
+        id<LingerPanGestureRecognizerDelegate> d = (id<LingerPanGestureRecognizerDelegate>) self.delegate;
+        if([d respondsToSelector:@selector(gestureEnded:touch:)]) {
+            [d gestureEnded:self touch:self.touch];
+        }
+    }
+}
+
+- (NSString*) nameForState:(UIGestureRecognizerState)state {
+    switch (state) {
+        case UIGestureRecognizerStatePossible:
+            return @"Possible";
+        case UIGestureRecognizerStateBegan:
+            return @"Began";
+        case UIGestureRecognizerStateCancelled:
+            return @"Cancelled";
+        case UIGestureRecognizerStateChanged:
+            return @"Changed";
+        case UIGestureRecognizerStateEnded:
+            return @"Ended / Recofnized";
+        case UIGestureRecognizerStateFailed:
+            return @"Failed";
+    }
 }
 
 @end

@@ -15,6 +15,7 @@
 @optional
 
 - (void) gestureLingered:(LingerPanGestureRecognizer*)gesture touch:(UITouch*)touch;
+- (void) gestureEnded:(LingerPanGestureRecognizer*)gesture touch:(UITouch*)touch;
 
 @end
 
