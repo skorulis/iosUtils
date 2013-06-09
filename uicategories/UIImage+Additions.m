@@ -38,17 +38,33 @@
 }
 
 - (UIImage *) cropToCentreSquare {
-    int min = MIN(self.size.width,self.size.height);
-    double x = (self.size.width - min) / 2.0;
-    double y = (self.size.height - min) / 2.0;
+    if(self.size.height == self.size.width) { return self;}
+
+    UIImage* tmp = [UIImage imageWithCGImage:self.CGImage];
+    
+    int min = MIN(tmp.size.width,tmp.size.height);
+    double x = (tmp.size.width - min) / 2.0;
+    double y = (tmp.size.height - min) / 2.0;
     
     CGRect cropRect = CGRectMake(x, y, min, min);
-    CGImageRef imageRef = CGImageCreateWithImageInRect([self CGImage], cropRect);
+    CGImageRef imageRef = CGImageCreateWithImageInRect([tmp CGImage], cropRect);
     
-    UIImage *cropped = [UIImage imageWithCGImage:imageRef];
+    UIImage *cropped = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:self.imageOrientation];
     CGImageRelease(imageRef);
     
     return cropped;
+}
+
+- (UIImage*) rotate90 {
+    UIImage * ret = [[UIImage alloc] initWithCGImage:self.CGImage scale: 1.0 orientation: UIImageOrientationLeft];
+    return ret;
+    /*UIGraphicsBeginImageContext(self.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextRotateCTM (context, M_PI_2);
+    
+    UIImage* ret = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return ret;*/
 }
 
 @end
