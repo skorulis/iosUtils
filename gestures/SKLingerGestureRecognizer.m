@@ -12,6 +12,7 @@
 @interface SKLingerGestureRecognizer () {
     BOOL lingered;
     BOOL touchesStarted;
+    int currentTouchCount;
 }
 
 @property (nonatomic, strong) NSTimer* timer;
@@ -27,9 +28,12 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    if(touches.count > 1 || lingered) {
-        NSLog(@"FAIL ");
+    currentTouchCount+=touches.count;
+    if(touches.count > 1) {
+        NSLog(@"TB FAIL");
+        self.state = UIGestureRecognizerStateFailed;
     } else if(lingered) {
+        NSLog(@"TB END");
         self.state = UIGestureRecognizerStateEnded;
     } else {
         touchesStarted = TRUE;
@@ -48,14 +52,24 @@
 }
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"Ended touches %d",touches.count);
     touchesStarted = FALSE;
     [self.timer invalidate]; self.timer = nil;
     self.state = UIGestureRecognizerStateEnded;
+    currentTouchCount-=touches.count;
+    NSLog(@"Final touch count %d",currentTouchCount);
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    currentTouchCount-=touches.count;
+    NSLog(@"Cancel touch count %d",currentTouchCount);
+}
+
+- (void)ignoreTouch:(UITouch *)touch forEvent:(UIEvent *)event {
+    NSLog(@"Ignore touches %d",currentTouchCount);
 }
 
 - (void) recognize {
-    NSLog(@"RECOG");
+    NSLog(@"RECOG %d",currentTouchCount);
     self.state = UIGestureRecognizerStateBegan;
     lingered = TRUE;
     self.timer = nil;
