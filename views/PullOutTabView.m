@@ -144,6 +144,12 @@
     if(gesture.state == UIGestureRecognizerStateChanged) {
         value = MIN(value,max);
         value = MAX(value,min);
+        float pct;
+        if([self isPullUp]) {
+            pct = 1-(value-min)/(max - min);
+        } else {
+            pct = (value-min)/(max - min);
+        }
         if(self.direction == kPullOutTabBottom) {
             self.handleOuter.y = value;
             self.contentOuter.y = self.handleOuter.bottom;
@@ -156,7 +162,7 @@
             self.handleOuter.x = value;
             self.contentOuter.x = self.handleOuter.x - self.contentOuter.width;
         }
-        float pct = 1-(value-min)/(max - min);
+        
         self.spinningHandle.transform = CGAffineTransformMakeRotation(M_PI*pct);
     } else if(gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateFailed) {
         CGFloat mid = (min + max)/2;
