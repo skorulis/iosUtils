@@ -8,6 +8,7 @@
 
 #import "Graphics.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CGPointMath.h"
 
 @implementation Graphics
 
@@ -19,15 +20,26 @@
     float rightCircleSize = rightCircleRatio*size;
     float leftCircleSize = leftCircleRatio*size;
     float gapSize = gapRatio * size;
-    float spikeRadius = rightCircleSize + gapSize;
+    float spikeRadius = rightCircleSize/2 + gapSize;
+    float spikeSize = 0.3f*size;
+    
+    CGFloat rCirclePoint = size-rightCircleSize/2;
     
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddEllipseInRect(path, NULL, CGRectMake(size-rightCircleSize, size-rightCircleSize, rightCircleSize, rightCircleSize));
     
     CGPathAddEllipseInRect(path, NULL, CGRectMake(0, 0, leftCircleSize, leftCircleSize));
     
-    CGPathMoveToPoint(path, NULL, <#CGFloat x#>, <#CGFloat y#>)
+    CGPoint dir = [CGPointMath pointFromAngle:-M_PI];
     
+    float x = rCirclePoint + dir.x*spikeRadius;
+    float y = rCirclePoint + dir.y*spikeRadius;
+    
+    
+    CGPathMoveToPoint(path, NULL, x, y);
+    x = rCirclePoint + dir.x*(spikeRadius+spikeSize);
+    y = rCirclePoint + dir.y*(spikeRadius+spikeSize);
+    CGPathAddLineToPoint(path, NULL, x, y);
     return path;
 }
 

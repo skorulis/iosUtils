@@ -15,6 +15,8 @@
 + (CGFloat) length:(CGPoint)p1;
 + (CGFloat) dotProduct:(CGPoint)p1 p2:(CGPoint)p2;
 + (CGFloat) rotation:(CGPoint)point;
+
 + (CGPoint) point:(CGPoint)p1 minus:(CGPoint)p2;
++ (CGPoint) pointFromAngle:(CGFloat)angle;
 
 @end

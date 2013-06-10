@@ -37,4 +37,8 @@
     return CGPointMake(p1.x-p2.x, p1.y-p2.y);
 }
 
++ (CGPoint) pointFromAngle:(CGFloat)angle {
+    return CGPointMake(cosf(angle), sinf(angle));
+}
+
 @end
