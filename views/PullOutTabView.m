@@ -27,10 +27,13 @@
 - (void) awakeFromNib {
     [super awakeFromNib];
     
+    self.allContentHolder = [[UIView alloc] initWithFrame:self.bounds];
+
     self.handleOuter = [UIView new];
     self.contentOuter = [UIView new];
-    [self addSubview:self.handleOuter];
-    [self addSubview:self.contentOuter];
+    [self.allContentHolder addSubview:self.handleOuter];
+    [self.allContentHolder addSubview:self.contentOuter];
+    [self addSubview:self.allContentHolder];
     
     self.pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panned:)];
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
@@ -49,6 +52,9 @@
     
     [self.handleOuter addSubview:self.handle];
     [self layoutSubviews];
+    if([self.delegate respondsToSelector:@selector(pullOutTabDidReload:)]) {
+        [self.delegate pullOutTabDidReload:self];
+    }
 }
 
 - (void) layoutSubviews {
@@ -59,12 +65,17 @@
     if(self.direction == kPullOutTabBottom) {
         self.handleOuter.y = self.height - self.handleOuter.height;
     } else if(self.direction == kPullOutTabRight) {
-        self.handleOuter.x = self.width - self.handleOuter.width - (_tabOpen ? self.contentOuter.width : 0);
-        self.contentOuter.x = self.width - (_tabOpen ? self.contentOuter.width : 0);
+        self.handleOuter.x = 0;
+        self.contentOuter.x = self.handleOuter.width;
+        self.allContentHolder.x = _tabOpen ? [self handleMinValue] : [self handleMaxValue];
+        self.allContentHolder.width = self.contentOuter.width + self.handleOuter.width;
     } else if(self.direction == kPullOutTabLeft) {
-        self.handleOuter.x = 0 + (_tabOpen ? self.contentOuter.width : 0);
-        self.contentOuter.x = self.handleOuter.x - self.contentOuter.width;
+        self.handleOuter.x = self.contentOuter.width;
+        self.contentOuter.x = 0;
+        self.allContentHolder.x = _tabOpen ? [self handleMaxValue] : [self handleMinValue];
+        self.allContentHolder.width = self.contentOuter.width + self.handleOuter.width;
     }
+    
     self.spinningHandle.transform = self.tabOpen ? CGAffineTransformMakeRotation(M_PI) : CGAffineTransformIdentity;
 }
 
@@ -81,26 +92,26 @@
 - (CGFloat) handleMinValue {
     switch (self.direction) {
         case kPullOutTabBottom:
-            return self.height - self.handleOuter.height - self.contentOuter.height;
+            return self.height - self.contentOuter.height;
         case kPullOutTabTop:
-            return 0;
+            return -self.contentOuter.height;
         case kPullOutTabLeft:
-            return 0;
+            return -self.contentOuter.width;
         case kPullOutTabRight:
-            return self.width - self.handleOuter.width - self.contentOuter.width;
+            return self.width - self.contentOuter.width;
     }
 }
 
 - (CGFloat) handleMaxValue {
     switch (self.direction) {
         case kPullOutTabBottom:
-            return self.height - self.handleOuter.height;
+            return self.height;
         case kPullOutTabTop:
-            return self.contentOuter.height;
+            return 0;
         case kPullOutTabLeft:
-            return self.contentOuter.width;
+            return 0;
         case kPullOutTabRight:
-            return self.width - self.handleOuter.width;
+            return self.width;
     }
 }
 
@@ -150,18 +161,7 @@
         } else {
             pct = (value-min)/(max - min);
         }
-        if(self.direction == kPullOutTabBottom) {
-            self.handleOuter.y = value;
-            self.contentOuter.y = self.handleOuter.bottom;
-        } else if(self.direction == kPullOutTabTop) {
-            
-        } else if(self.direction == kPullOutTabRight) {
-            self.handleOuter.x = value;
-            self.contentOuter.x = self.handleOuter.right;
-        } else if(self.direction == kPullOutTabLeft) {
-            self.handleOuter.x = value;
-            self.contentOuter.x = self.handleOuter.x - self.contentOuter.width;
-        }
+        self.allContentHolder.x = value;
         
         self.spinningHandle.transform = CGAffineTransformMakeRotation(M_PI*pct);
     } else if(gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateFailed) {

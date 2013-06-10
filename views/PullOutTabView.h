@@ -24,6 +24,7 @@ typedef enum {
 - (UIView*) pullUpTabViewHandle:(PullOutTabView*)pullUp;
 - (UIView*) pullUpTabViewSpinningHandle:(PullOutTabView*)pullUp;
 - (void) pullUpTabStateChanged:(PullOutTabView*)pullUp;
+- (void) pullOutTabDidReload:(PullOutTabView*)pullOut;
 
 @end
 
@@ -33,6 +34,8 @@ typedef enum {
 @property (nonatomic, assign) PullOutTabDirection direction;
 @property (nonatomic, strong) id<PullOutTabDelegate> delegate;
 @property (nonatomic, assign) BOOL tabOpen;
+
+@property (nonatomic, strong) UIView* allContentHolder;
 
 - (void) reload;
 - (void) toggleState:(BOOL)animated;
