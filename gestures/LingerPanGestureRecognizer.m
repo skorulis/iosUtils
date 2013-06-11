@@ -49,6 +49,16 @@
     [self.timer invalidate]; self.timer = nil;
 }
 
+- (void) reset {
+    [super reset];
+    [self.timer invalidate]; self.timer = nil;
+    id<LingerPanGestureRecognizerDelegate> d = (id<LingerPanGestureRecognizerDelegate>) self.delegate;
+    if([d respondsToSelector:@selector(gestureEnded:touch:)]) {
+        [d gestureEnded:self touch:self.touch];
+    }
+    NSLog(@"Reset gesture");
+}
+
 - (void) lingered {
     NSLog(@"Lingered");
     self.timer = nil;
