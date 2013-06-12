@@ -13,5 +13,6 @@
 + (CGPathRef) newSkorulisLogoPath:(CGFloat)size;
 + (CGPathRef) drawSpike:(CGMutablePathRef)path angle:(CGFloat)angle size:(CGFloat)size;
 + (CGPathRef) drawCircles:(CGMutablePathRef)path size:(CGFloat)size;
++ (UIImage*) imageFromColor:(UIColor*)color;
 
 @end

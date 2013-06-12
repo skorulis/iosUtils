@@ -19,6 +19,23 @@
 
 @implementation Graphics
 
++ (UIImage*) imageFromColor:(UIColor*)color {
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, scale);
+    
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(ctx, color.CGColor);
+    CGContextFillRect(ctx, CGRectMake(0, 0, 1, 1));
+    
+    UIImage* img = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    return img;
+}
+
+
+#pragma mark skorulis log0
+
 + (CGPathRef) newSkorulisLogoPath:(CGFloat)size {
     
     CGMutablePathRef path = CGPathCreateMutable();
