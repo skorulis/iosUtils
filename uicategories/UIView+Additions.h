@@ -23,5 +23,6 @@
 
 - (void) centerInParentVerticalRounded;
 - (void) centerInParentHorizontalRounded;
+- (UIImage *) renderImage;
 
 @end
