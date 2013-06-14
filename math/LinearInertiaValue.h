@@ -10,9 +10,9 @@
 
 @interface LinearInertiaValue : NSObject
 
-@property (nonatomic, assign) double initialValue;
+@property (nonatomic, assign) double value;
 @property (nonatomic, assign) double inertia;
 
-- (double) getCurrentValue;
+- (double) updateValue:(double)delta;
 
 @end

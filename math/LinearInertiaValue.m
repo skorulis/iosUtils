@@ -8,22 +8,11 @@
 
 #import "LinearInertiaValue.h"
 
-@interface LinearInertiaValue () {
-    double lastTime;
-}
-
-@end
-
 @implementation LinearInertiaValue
 
-- (void) setInitialValue:(double)initialValue {
-    _initialValue = initialValue;
-    lastTime = CACurrentMediaTime();
-}
-
-- (double) getCurrentValue {
-    double currentTime = CACurrentMediaTime();
-    
+- (double) updateValue:(double)delta {
+    _value -= _value * 0.5 * delta;
+    return _value;
 }
 
 @end
