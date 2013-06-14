@@ -7,6 +7,7 @@
 //
 
 #import "UIView+Additions.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation UIView (Additions)
 
@@ -90,6 +91,17 @@
 
 - (CGFloat) right {
     return self.x + self.width;
+}
+
+- (UIImage *) renderImage {
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return img;
 }
 
 @end
