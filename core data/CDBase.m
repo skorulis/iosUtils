@@ -7,6 +7,7 @@
 //
 
 #import "CDBase.h"
+#import <CoreData/CoreData.h>
 
 @implementation CDBase
 
@@ -27,7 +28,7 @@
     if (_managedObjectModel != nil) {
         return _managedObjectModel;
     }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"robin" withExtension:@"momd"];
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:[self databaseName] withExtension:@"momd"];
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
 }
@@ -41,7 +42,7 @@
 }
 
 - (void) createPersistentStore:(BOOL)firstAttempt {
-    NSURL *url = [[CDBase applicationDocumentsDirectory] URLByAppendingPathComponent:[self databaseName]];
+    NSURL *url = [[CDBase applicationDocumentsDirectory] URLByAppendingPathComponent:[self databaseFilename]];
     
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
@@ -58,13 +59,17 @@
 }
 
 - (void) deletePersistentStore {
-    NSURL *storeURL = [[CDBase applicationDocumentsDirectory] URLByAppendingPathComponent:[self databaseName]];
+    NSURL *storeURL = [[CDBase applicationDocumentsDirectory] URLByAppendingPathComponent:[self databaseFilename]];
     NSFileManager *localFileManager = [[NSFileManager alloc] init];
     [localFileManager removeItemAtURL:storeURL error:nil];
 }
 
 + (NSURL *)applicationDocumentsDirectory {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+- (NSString*) databaseFilename {
+    return [NSString stringWithFormat:@"%@.sqlite",[self databaseName]];
 }
 
 - (NSString*) databaseName {
