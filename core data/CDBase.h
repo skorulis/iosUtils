@@ -14,4 +14,7 @@
 @property (nonatomic, strong) NSPersistentStoreCoordinator* persistentStoreCoordinator;
 @property (nonatomic, strong) NSManagedObjectModel* managedObjectModel;
 
+- (NSString*) databaseName;
+- (void) databaseCreated;
+
 @end

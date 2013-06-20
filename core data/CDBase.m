@@ -55,6 +55,8 @@
             NSLog(@"Cannot handle error: %@, %@", error, [error userInfo]);
             abort();
         }
+    } else {
+        [self databaseCreated];
     }
 }
 
@@ -70,6 +72,12 @@
 
 - (NSString*) databaseFilename {
     return [NSString stringWithFormat:@"%@.sqlite",[self databaseName]];
+}
+
+#pragma mark methods to be implemented by subclasses
+
+- (void) databaseCreated {
+    //Empty method
 }
 
 - (NSString*) databaseName {
