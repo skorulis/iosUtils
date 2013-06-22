@@ -16,5 +16,6 @@
 
 - (NSString*) databaseName;
 - (void) databaseCreated;
+- (NSString*) databaseFilename;
 
 @end

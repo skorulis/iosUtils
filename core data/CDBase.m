@@ -80,6 +80,7 @@
     //Empty method
 }
 
+
 - (NSString*) databaseName {
     [NSException raise:@"Database name not implemented" format:@"Database name not implemented"];
     return nil;
