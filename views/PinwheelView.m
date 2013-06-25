@@ -11,7 +11,10 @@
 #import "UIView+Additions.h"
 #import "Rotateable.h"
 
-@interface PinwheelView ()
+@interface PinwheelView () {
+    int pins;
+    float angleDelta;
+}
 
 @property (nonatomic, strong) UIImageView* rotatingView;
 @property (nonatomic, strong) UIPanGestureRecognizer* panGesture;
@@ -60,6 +63,8 @@
         self.rotatingView.transform = CGAffineTransformMakeRotation(self.rotateInfo.rotation);
     } else if(pan.state == UIGestureRecognizerStateEnded || pan.state == UIGestureRecognizerStateCancelled) {
         [self.rotateInfo end];
+        int closest = [self closestPin:self.rotateInfo.rotation];
+        [self rotateToPin:closest animated:TRUE];
     }
 }
 
@@ -76,13 +81,47 @@
     return self.rotatingView.image;
 }
 
-- (void) rotateToPin:(int)pin {
+- (void) rotateToPin:(int)pin animated:(BOOL)animated {
+    float duration = 0.5f;
+    [UIView animateWithDuration:duration animations:^{
+        self.rotateInfo.rotation = angleDelta*pin;
+        self.rotatingView.transform = CGAffineTransformMakeRotation(self.rotateInfo.rotation);
+    } completion:^(BOOL completion) {
+        
+    }];
     
 }
 
+- (int) closestPin:(CGFloat)rot {
+    CGFloat minDiff = INFINITY;
+    CGFloat diff,angle;
+    int ret = 0;
+    for(int i=0; i < pins; ++i) {
+        angle = angleDelta*i;
+        diff = [PinwheelView normaliseRotation:fabs(rot - angle)];
+        NSLog(@"%f %f %f",diff,angle,rot);
+        if(diff < minDiff) {
+            ret = i;
+            minDiff = diff;
+        }
+    }
+    return ret;
+}
+
++ (CGFloat) normaliseRotation:(CGFloat)rot {
+    while(rot > M_PI*2) {
+        rot -= M_PI*2;
+    }
+    while(rot < 0) {
+        rot += M_PI*2;
+    }
+    
+    return rot;
+}
+
 - (void) reload {
-    int pins = [self.delegate numberOfPins:self];
-    float angleDelta = 2*M_PI / pins;
+    pins = [self.delegate numberOfPins:self];
+    angleDelta = 2*M_PI / pins;
     float len = self.width/2 - self.edgeDistance;
     CGPoint c = CGPointMake(self.width/2, self.height/2);
     for(int i=0; i < pins; ++i) {
@@ -94,7 +133,6 @@
         p = [CGPointMath add:c p2:p];
         holder.center = [CGPointMath round:p];
         [holder addSubview:v];
-        NSLog(@"P %@",NSStringFromCGPoint(holder.center));
         v.transform = CGAffineTransformMakeRotation(angle + M_PI/2);
         
         [self.rotatingView addSubview:holder];
@@ -104,7 +142,6 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     CGPoint cp = CGPointMake(self.width/2, self.width/2);
     float dist = [CGPointMath dist:cp p2:point];
-    NSLog(@"DIST %f %@",dist,NSStringFromCGRect(self.frame));
     if(dist > self.width/2) {
         return nil;
     } else if(self.ringWidth > 0 &&  dist < self.width/2 - self.ringWidth) {
