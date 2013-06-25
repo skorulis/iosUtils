@@ -15,6 +15,7 @@
 @property (nonatomic, assign) CGFloat lastRot;
 @property (nonatomic, assign) NSTimeInterval lastRotTime;
 @property (nonatomic, assign) CGFloat rotation;
+@property (nonatomic, assign) CGFloat rotSpeed;
 
 - (void) update:(CGFloat)rot;
 - (void) end;

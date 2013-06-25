@@ -10,11 +10,17 @@
 
 @implementation Rotateable
 
+- (id) init {
+    self = [super init];
+    self.rotSpeed = 5;
+    return self;
+}
+
 - (void) update:(CGFloat)rot {
     if(self.rotActive) {
         self.lastRotTime = CACurrentMediaTime();
         self.lastRotAmount = rot - self.lastRot;
-        self.rotation+=self.lastRotAmount;
+        self.rotation+=self.lastRotAmount*self.rotSpeed;
     } else {
         self.rotActive = TRUE;
     }
