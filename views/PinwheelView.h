@@ -14,6 +14,10 @@
 
 - (int) numberOfPins:(PinwheelView*)pinwheel;
 - (UIView*) pinwheel:(PinwheelView*)pinwheel viewForPin:(int)pin;
+
+
+@optional
+
 - (void) pinwheel:(PinwheelView*)pinwheel didSelectPin:(int)pin;
 - (void) pinwheel:(PinwheelView*)pinwheel didRotateToPin:(int)pin;
 
