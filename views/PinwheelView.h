@@ -27,11 +27,12 @@
 
 //Distance a pin sits from the outside edge
 @property (nonatomic, assign) CGFloat edgeDistance;
+@property (nonatomic, assign) CGFloat startAngle;
 
 @property (nonatomic, weak) id<PinwheelViewDelegate> delegate;
+@property (nonatomic, strong) UIImage* backgroundImage;
 
 - (void) rotateToPin:(int)pin;
-- (void) setBackgroundImage:(UIImage*)image;
 - (void) reload;
 
 @end

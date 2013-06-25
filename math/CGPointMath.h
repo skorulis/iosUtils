@@ -21,6 +21,6 @@
 
 + (CGPoint) mult:(CGPoint)point scalar:(float)s;
 + (CGPoint) add:(CGPoint)p1 p2:(CGPoint)p2;
-
++ (CGPoint) round:(CGPoint)p;
 
 @end

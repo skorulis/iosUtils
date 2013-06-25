@@ -49,4 +49,8 @@
     return CGPointMake(p1.x + p2.x, p1.y + p2.y);
 }
 
++ (CGPoint) round:(CGPoint)p {
+    return CGPointMake(roundf(p.x), roundf(p.y));
+}
+
 @end

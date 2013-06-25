@@ -32,7 +32,8 @@
 }
 
 - (void) setDefaultValues {
-    self.edgeDistance = 10;
+    self.edgeDistance = 30;
+    self.startAngle = -M_PI/2;
 }
 
 - (void) setupViews {
@@ -49,6 +50,10 @@
     self.rotatingView.image = image;
 }
 
+- (UIImage*) backgroundImage {
+    return self.rotatingView.image;
+}
+
 - (void) rotateToPin:(int)pin {
     
 }
@@ -59,12 +64,18 @@
     float len = self.width/2 - self.edgeDistance;
     CGPoint c = CGPointMake(self.width/2, self.height/2);
     for(int i=0; i < pins; ++i) {
+        float angle = angleDelta*i + self.startAngle;
         UIView* v = [self.delegate pinwheel:self viewForPin:i];
-        CGPoint p = [CGPointMath pointFromAngle:angleDelta];
+        UIView* holder = [[UIView alloc] initWithFrame:v.bounds];
+        CGPoint p = [CGPointMath pointFromAngle:angle];
         p = [CGPointMath mult:p scalar:len];
         p = [CGPointMath add:c p2:p];
-        v.center = p;
-        [self.rotatingView addSubview:v];
+        holder.center = [CGPointMath round:p];
+        [holder addSubview:v];
+        NSLog(@"P %@",NSStringFromCGPoint(holder.center));
+        v.transform = CGAffineTransformMakeRotation(angle + M_PI/2);
+        
+        [self.rotatingView addSubview:holder];
     }
 }
 
