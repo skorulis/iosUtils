@@ -19,4 +19,8 @@
 + (CGPoint) point:(CGPoint)p1 minus:(CGPoint)p2;
 + (CGPoint) pointFromAngle:(CGFloat)angle;
 
++ (CGPoint) mult:(CGPoint)point scalar:(float)s;
++ (CGPoint) add:(CGPoint)p1 p2:(CGPoint)p2;
+
+
 @end

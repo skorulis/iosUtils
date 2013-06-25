@@ -41,4 +41,12 @@
     return CGPointMake(cosf(angle), sinf(angle));
 }
 
++ (CGPoint) mult:(CGPoint)point scalar:(float)s {
+    return CGPointMake(point.x*s, point.y*s);
+}
+
++ (CGPoint) add:(CGPoint)p1 p2:(CGPoint)p2 {
+    return CGPointMake(p1.x + p2.x, p1.y + p2.y);
+}
+
 @end
