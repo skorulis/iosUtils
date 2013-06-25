@@ -27,6 +27,7 @@
 
 //Distance a pin sits from the outside edge
 @property (nonatomic, assign) CGFloat edgeDistance;
+@property (nonatomic, assign) CGFloat ringWidth;
 @property (nonatomic, assign) CGFloat startAngle;
 
 @property (nonatomic, weak) id<PinwheelViewDelegate> delegate;
