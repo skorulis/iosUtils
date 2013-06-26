@@ -13,11 +13,13 @@
 
 @interface PinwheelView () {
     int pins;
+    int currentPin;
     float angleDelta;
 }
 
 @property (nonatomic, strong) UIImageView* rotatingView;
 @property (nonatomic, strong) UIPanGestureRecognizer* panGesture;
+@property (nonatomic, strong) UITapGestureRecognizer* tapGesture;
 @property (nonatomic, strong) Rotateable* rotateInfo;
 
 @end
@@ -41,6 +43,7 @@
     self.edgeDistance = 30;
     self.startAngle = -M_PI/2;
     self.ringWidth = -1;
+    self.minimumTapDegrees = M_PI/4;
 }
 
 - (void) setupViews {
@@ -48,7 +51,27 @@
     self.rotatingView = [[UIImageView alloc] initWithFrame:self.bounds];
     self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panned:)];
     [self addGestureRecognizer:self.panGesture];
+    self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
+    [self addGestureRecognizer:self.tapGesture];
+    
     [self addSubview:self.rotatingView];
+}
+
+- (void) tapped:(UITapGestureRecognizer*)tap {
+    if(tap.state == UIGestureRecognizerStateRecognized) {
+        CGPoint loc = [tap locationInView:self];
+        CGPoint dir = [CGPointMath point:loc minus:self.center];
+        CGFloat rot = [CGPointMath rotation:dir];
+        CGFloat diff = (rot - self.startAngle);
+        NSLog(@"Diff %f",diff);
+        if(diff > self.minimumTapDegrees) {
+            
+        } else if(diff < -self.minimumTapDegrees) {
+            
+        }
+        //int pin = [self closestPin:self.rotateInfo.rotation+diff];
+        //[self rotateToPin:pin animated:TRUE];
+    }
 }
 
 - (void) panned:(UIPanGestureRecognizer*)pan {
@@ -60,10 +83,12 @@
         self.rotatingView.transform = CGAffineTransformMakeRotation(rot);
         
         [self.rotateInfo update:rot];
+        NSLog(@"Rotate to %f",self.rotateInfo.rotation);
         self.rotatingView.transform = CGAffineTransformMakeRotation(self.rotateInfo.rotation);
     } else if(pan.state == UIGestureRecognizerStateEnded || pan.state == UIGestureRecognizerStateCancelled) {
         [self.rotateInfo end];
-        int closest = [self closestPin:self.rotateInfo.rotation];
+        int closest = [self closestPin:-self.rotateInfo.rotation];
+        NSLog(@"Closest = %d",closest);
         [self rotateToPin:closest animated:TRUE];
     }
 }
@@ -84,10 +109,13 @@
 - (void) rotateToPin:(int)pin animated:(BOOL)animated {
     float duration = 0.5f;
     [UIView animateWithDuration:duration animations:^{
-        self.rotateInfo.rotation = angleDelta*pin;
+        self.rotateInfo.rotation = -angleDelta*pin;
         self.rotatingView.transform = CGAffineTransformMakeRotation(self.rotateInfo.rotation);
     } completion:^(BOOL completion) {
-        
+        currentPin = pin;
+        if([self.delegate respondsToSelector:@selector(pinwheel:didRotateToPin:)]) {
+            [self.delegate pinwheel:self didRotateToPin:pin];
+        }
     }];
     
 }
@@ -98,7 +126,7 @@
     int ret = 0;
     for(int i=0; i < pins; ++i) {
         angle = angleDelta*i;
-        diff = [PinwheelView normaliseRotation:fabs(rot - angle)];
+        diff = [PinwheelView normaliseRotation:(rot - angle)];
         NSLog(@"%f %f %f",diff,angle,rot);
         if(diff < minDiff) {
             ret = i;
