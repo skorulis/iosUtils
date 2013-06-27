@@ -45,6 +45,7 @@
     self.startAngle = -M_PI/2;
     self.ringWidth = -1;
     self.minimumTapMult = 0.2;
+    self.fadeSpeed = 1.5f;
 }
 
 - (void) setupViews {
@@ -84,12 +85,13 @@
         self.rotatingView.transform = CGAffineTransformMakeRotation(rot);
         
         [self.rotateInfo update:rot];
-        NSLog(@"Rotate to %f",self.rotateInfo.rotation);
         self.rotatingView.transform = CGAffineTransformMakeRotation(self.rotateInfo.rotation);
+        if([self.delegate respondsToSelector:@selector(pinwheel:didRotate:)]) {
+            [self.delegate pinwheel:self didRotate:self.rotateInfo.rotation];
+        }
     } else if(pan.state == UIGestureRecognizerStateEnded || pan.state == UIGestureRecognizerStateCancelled) {
         [self.rotateInfo end];
         int closest = [self closestPin:-self.rotateInfo.rotation];
-        NSLog(@"Closest = %d",closest);
         [self rotateToPin:closest animated:TRUE];
     }
 }
@@ -194,6 +196,16 @@
         return nil;
     }
     return self;
+}
+
+- (float) pctActive {
+    //int closest = [self closestPin:self.rotateInfo.rotation];
+    float angle = angleDelta*currentPin;
+    NSLog(@"Angle %f %f",angle,self.rotateInfo.rotation);
+    float diff = [PinwheelView normaliseRotation:(-self.rotateInfo.rotation - angle)];
+    diff = MIN(diff,M_PI*2 - diff);
+    diff = (angleDelta - diff*self.fadeSpeed)/angleDelta;
+    return MAX(diff,0);
 }
 
 @end
