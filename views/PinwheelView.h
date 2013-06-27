@@ -29,7 +29,7 @@
 @property (nonatomic, assign) CGFloat edgeDistance;
 @property (nonatomic, assign) CGFloat ringWidth;
 @property (nonatomic, assign) CGFloat startAngle;
-@property (nonatomic, assign) CGFloat minimumTapDegrees;
+@property (nonatomic, assign) CGFloat minimumTapMult;
 
 @property (nonatomic, weak) id<PinwheelViewDelegate> delegate;
 @property (nonatomic, strong) UIImage* backgroundImage;

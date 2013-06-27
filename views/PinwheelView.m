@@ -15,6 +15,7 @@
     int pins;
     int currentPin;
     float angleDelta;
+    float _minimumTapRads;
 }
 
 @property (nonatomic, strong) UIImageView* rotatingView;
@@ -43,7 +44,7 @@
     self.edgeDistance = 30;
     self.startAngle = -M_PI/2;
     self.ringWidth = -1;
-    self.minimumTapDegrees = M_PI/14;
+    self.minimumTapMult = 0.2;
 }
 
 - (void) setupViews {
@@ -64,9 +65,9 @@
         CGFloat rot = [CGPointMath rotation:dir];
         CGFloat diff = (rot - self.startAngle);
         NSLog(@"Diff %f",diff);
-        if(diff > self.minimumTapDegrees) {
+        if(diff > _minimumTapRads) {
             [self rotateRight:TRUE];
-        } else if(diff < -self.minimumTapDegrees) {
+        } else if(diff < -_minimumTapRads) {
             [self rotateLeft:TRUE];
         }
         //int pin = [self closestPin:self.rotateInfo.rotation+diff];
@@ -181,6 +182,7 @@
         
         [self.rotatingView addSubview:holder];
     }
+    _minimumTapRads = 2 * self.minimumTapMult * M_PI / pins;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
