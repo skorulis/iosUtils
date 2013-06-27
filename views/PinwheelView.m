@@ -43,7 +43,7 @@
     self.edgeDistance = 30;
     self.startAngle = -M_PI/2;
     self.ringWidth = -1;
-    self.minimumTapDegrees = M_PI/4;
+    self.minimumTapDegrees = M_PI/14;
 }
 
 - (void) setupViews {
@@ -65,9 +65,9 @@
         CGFloat diff = (rot - self.startAngle);
         NSLog(@"Diff %f",diff);
         if(diff > self.minimumTapDegrees) {
-            
+            [self rotateRight:TRUE];
         } else if(diff < -self.minimumTapDegrees) {
-            
+            [self rotateLeft:TRUE];
         }
         //int pin = [self closestPin:self.rotateInfo.rotation+diff];
         //[self rotateToPin:pin animated:TRUE];
@@ -118,6 +118,22 @@
         }
     }];
     
+}
+
+- (void) rotateLeft:(BOOL)animated {
+    int pin = currentPin - 1;
+    if(pin < 0) {
+        pin = pins - 1;
+    }
+    [self rotateToPin:pin animated:animated];
+}
+
+- (void) rotateRight:(BOOL)animated {
+    int pin = currentPin + 1;
+    if(pin >= pins) {
+        pin = 0;
+    }
+    [self rotateToPin:pin animated:animated];
 }
 
 - (int) closestPin:(CGFloat)rot {
