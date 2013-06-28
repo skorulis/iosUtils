@@ -19,6 +19,7 @@
 @optional
 
 - (void) pinwheel:(PinwheelView*)pinwheel didSelectPin:(int)pin;
+- (void) pinwheel:(PinwheelView*)pinwheel willRotateToPin:(int)pin;
 - (void) pinwheel:(PinwheelView*)pinwheel didRotateToPin:(int)pin;
 - (void) pinwheel:(PinwheelView*)pinwheel didRotate:(float)angle;
 
@@ -32,6 +33,7 @@
 @property (nonatomic, assign) CGFloat startAngle;
 @property (nonatomic, assign) CGFloat minimumTapMult;
 @property (nonatomic, assign) CGFloat fadeSpeed;
+@property (nonatomic, assign) NSTimeInterval animationSpeed;
 
 @property (nonatomic, weak) id<PinwheelViewDelegate> delegate;
 @property (nonatomic, strong) UIImage* backgroundImage;

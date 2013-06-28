@@ -46,6 +46,7 @@
     self.ringWidth = -1;
     self.minimumTapMult = 0.2;
     self.fadeSpeed = 1.5f;
+    self.animationSpeed = 0.5;
 }
 
 - (void) setupViews {
@@ -110,7 +111,10 @@
 }
 
 - (void) rotateToPin:(int)pin animated:(BOOL)animated {
-    float duration = 0.5f;
+    float duration = self.animationSpeed;
+    if([self.delegate respondsToSelector:@selector(pinwheel:willRotateToPin:)]) {
+        [self.delegate pinwheel:self willRotateToPin:pin];
+    }
     [UIView animateWithDuration:duration animations:^{
         self.rotateInfo.rotation = -angleDelta*pin;
         self.rotatingView.transform = CGAffineTransformMakeRotation(self.rotateInfo.rotation);
