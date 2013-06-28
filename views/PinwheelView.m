@@ -72,8 +72,6 @@
         } else if(diff < -_minimumTapRads) {
             [self rotateLeft:TRUE];
         }
-        //int pin = [self closestPin:self.rotateInfo.rotation+diff];
-        //[self rotateToPin:pin animated:TRUE];
     }
 }
 
