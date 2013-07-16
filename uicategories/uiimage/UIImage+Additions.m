@@ -55,6 +55,26 @@
     return cropped;
 }
 
+- (CGRect) centreSquare {
+    UIImage* tmp = [self fixOrientation];
+    
+    int min = MIN(tmp.size.width,tmp.size.height);
+    int x = (tmp.size.width - min) / 2.0;
+    int y = (tmp.size.height - min) / 2.0;
+    CGRect cropRect = CGRectMake(x, y, min, min);
+    return cropRect;
+}
+
+- (UIImage*) cropToRect:(CGRect)rect {
+    UIImage* tmp = [self fixOrientation];
+    CGImageRef imageRef = CGImageCreateWithImageInRect([tmp CGImage], rect);
+    
+    UIImage *cropped = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    
+    return cropped;
+}
+
 - (UIImage *)fixOrientation {
     
     // No-op if the orientation is already correct

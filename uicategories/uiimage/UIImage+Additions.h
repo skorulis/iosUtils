@@ -14,5 +14,8 @@
 + (UIImage *) imageWithView:(UIView *)view;
 + (UIImage *) imageWithLayer:(CALayer*)layer;
 - (UIImage *) cropToCentreSquare;
+- (UIImage*) cropToRect:(CGRect)rect;
+- (UIImage *)fixOrientation;
+- (CGRect) centreSquare;
 
 @end
