@@ -27,6 +27,8 @@
 
 @implementation PinwheelView
 
+@dynamic currentPin;
+
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     [self setDefaultValues];
@@ -208,6 +210,10 @@
     diff = MIN(diff,M_PI*2 - diff);
     diff = (angleDelta - diff*self.fadeSpeed)/angleDelta;
     return MAX(diff,0);
+}
+
+- (int) currentPin {
+    return currentPin;
 }
 
 @end

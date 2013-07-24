@@ -37,6 +37,7 @@
 
 @property (nonatomic, weak) id<PinwheelViewDelegate> delegate;
 @property (nonatomic, strong) UIImage* backgroundImage;
+@property (nonatomic, readonly, assign) int currentPin;
 
 - (void) rotateToPin:(int)pin animated:(BOOL)animated;
 - (void) reload;
