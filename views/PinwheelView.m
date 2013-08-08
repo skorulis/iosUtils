@@ -65,10 +65,10 @@
 - (void) tapped:(UITapGestureRecognizer*)tap {
     if(tap.state == UIGestureRecognizerStateRecognized) {
         CGPoint loc = [tap locationInView:self];
-        CGPoint dir = [CGPointMath point:loc minus:self.center];
+        CGPoint cent = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
+        CGPoint dir = [CGPointMath point:loc minus:cent];
         CGFloat rot = [CGPointMath rotation:dir];
         CGFloat diff = (rot - self.startAngle);
-        NSLog(@"Diff %f",diff);
         if(diff > _minimumTapRads) {
             [self rotateRight:TRUE];
         } else if(diff < -_minimumTapRads) {
@@ -188,7 +188,7 @@
         
         [self.rotatingView addSubview:holder];
     }
-    _minimumTapRads = 2 * self.minimumTapMult * M_PI / pins;
+    _minimumTapRads = 6 * self.minimumTapMult * M_PI / pins;
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
