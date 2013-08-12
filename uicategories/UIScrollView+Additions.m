@@ -17,7 +17,7 @@
 
 - (float) zoomLevelToFillContent {
     float zoom = MAX(self.width/self.contentSize.width,self.height/self.contentSize.height);
-    return zoom;
+    return MIN(zoom, 1);
 }
 
 - (void) setZoomToFitContent {
