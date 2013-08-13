@@ -40,6 +40,7 @@
 @property (nonatomic, readonly, assign) int currentPin;
 
 - (void) rotateToPin:(int)pin animated:(BOOL)animated;
+- (int) distanceToPin:(int)pin;
 - (void) reload;
 - (float) pctActive;
 

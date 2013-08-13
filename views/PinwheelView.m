@@ -127,6 +127,19 @@
     
 }
 
+- (int) distanceToPin:(int)pin {
+    //0 - 9 = 1
+    //1 - 9 = 2
+    //0 - 5 = 5
+    //0 - 6 = 4
+    int halfPins = [self.delegate numberOfPins:self]/2;
+    int gap = abs(pin - self.currentPin);
+    if(gap > halfPins) {
+        gap = halfPins - (gap - halfPins);
+    }
+    return gap;
+}
+
 - (void) rotateLeft:(BOOL)animated {
     int pin = currentPin - 1;
     if(pin < 0) {
